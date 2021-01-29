@@ -1,27 +1,42 @@
-import React, { Component } from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import { ThemeContext } from '../context/ThemeContext'
+import AddBook from './AddBook'
 
-class BookList extends Component{
+const BookList = () => {
+    const [Books,setBooks] = useState([
 
-    render() {
-       
-        return (
-            <ThemeContext.Consumer>{(context) => {
-                const { isDarkTheme, light, dark } = context;
-                const theme = isDarkTheme ? dark : light;
-                return (
-                    <div className="book-list" style={{ color: theme.syntax, background: theme.bg }}>
-                        <ul>
-                            <li style={{ background: theme.ui }}>The Last Wish</li>
-                            <li style={{ background: theme.ui }}>Sword of Destiny</li>
-                            <li style={{ background: theme.ui }}>Blood of Elves</li>
-                        </ul>        
-                     </div>
-                ) 
-            }}
-            </ThemeContext.Consumer>
+        { title: "The Last Wish" },
+        { title: "Sword of Destiny" },
+        { title: "Blood of Elves" }
+        
+    ]);
+    const addBook = (newBook) => {
+        setBooks([...Books, { title:newBook }]);
+    }
+
+    useEffect(() => {
+        //console.log('useEffect hook ran', Books)
+    });
+
+    const { isDarkTheme, light, dark } = useContext(ThemeContext);
+    const theme = isDarkTheme ? dark : light;
+
+    return(
+            
+
+        <div className="book-list" style={{ color: theme.syntax, background: theme.bg }}>
+            <ul>
+                {Books.map(book => {
+                    return (
+                        <li key={book.title} style={{ background: theme.ui }}>{book.title}</li>
+                    )
+                })}
+            </ul>
+            <AddBook addBook={ addBook}/>
+         </div>
+
         )
     }
-}
 
 export default BookList;
+
